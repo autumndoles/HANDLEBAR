@@ -1,0 +1,518 @@
+/* =========================================
+   HANDLEBAR
+   Main Interface Styles
+   ========================================= */
+
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100%;
+    background: #101010;
+    color: #ffffff;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    overflow-x: hidden;
+    user-select: none;
+}
+
+/* =========================================
+   Main App
+   ========================================= */
+
+#handlebar {
+    width: 100%;
+    max-width: 900px;
+    min-height: 100vh;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* =========================================
+   Top Bar
+   ========================================= */
+
+.top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+
+    padding: 10px 5px 20px;
+
+    border-bottom: 1px solid #303030;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    font-size: 24px;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+.brand-icon {
+    font-size: 28px;
+}
+
+.status {
+    padding: 7px 12px;
+
+    border-radius: 20px;
+
+    background: #202020;
+    color: #aaaaaa;
+
+    font-size: 13px;
+    font-weight: bold;
+}
+
+/* =========================================
+   Now Playing
+   ========================================= */
+
+.now-playing {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+    padding: 30px 10px 20px;
+}
+
+.album-art {
+    flex-shrink: 0;
+
+    width: 120px;
+    height: 120px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 14px;
+
+    background: #242424;
+
+    font-size: 48px;
+}
+
+.track-info {
+    min-width: 0;
+}
+
+.track-info h1 {
+    margin: 0 0 8px;
+
+    font-size: 30px;
+    line-height: 1.15;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.track-info p {
+    margin: 0;
+
+    color: #999999;
+
+    font-size: 17px;
+}
+
+/* =========================================
+   Progress Bar
+   ========================================= */
+
+.progress-section {
+    padding: 5px 5px 15px;
+}
+
+.time-row {
+    display: flex;
+    justify-content: space-between;
+
+    margin-bottom: 6px;
+
+    color: #999999;
+
+    font-size: 13px;
+}
+
+input[type="range"] {
+    width: 100%;
+    height: 8px;
+
+    margin: 0;
+
+    appearance: none;
+    -webkit-appearance: none;
+
+    border-radius: 10px;
+
+    background: #333333;
+
+    cursor: pointer;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    appearance: none;
+    -webkit-appearance: none;
+
+    width: 22px;
+    height: 22px;
+
+    border-radius: 50%;
+
+    background: #ffffff;
+
+    cursor: pointer;
+}
+
+input[type="range"]::-moz-range-thumb {
+    width: 22px;
+    height: 22px;
+
+    border: none;
+    border-radius: 50%;
+
+    background: #ffffff;
+
+    cursor: pointer;
+}
+
+/* =========================================
+   Main Controls
+   ========================================= */
+
+.controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 18px;
+
+    padding: 15px 0 20px;
+}
+
+.control-button {
+    width: 58px;
+    height: 58px;
+
+    border: none;
+    border-radius: 50%;
+
+    background: #292929;
+    color: #ffffff;
+
+    font-size: 24px;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.08s ease,
+        background 0.15s ease;
+}
+
+.control-button:hover {
+    background: #383838;
+}
+
+.control-button:active {
+    transform: scale(0.92);
+}
+
+.control-button.play {
+    width: 78px;
+    height: 78px;
+
+    background: #ffffff;
+    color: #111111;
+
+    font-size: 30px;
+}
+
+.control-button.play:hover {
+    background: #dddddd;
+}
+
+.control-button.secondary {
+    width: 48px;
+    height: 48px;
+
+    font-size: 18px;
+
+    color: #aaaaaa;
+}
+
+/* Active shuffle/repeat state */
+
+.control-button.active {
+    color: #ffffff;
+    background: #444444;
+}
+
+/* =========================================
+   Volume
+   ========================================= */
+
+.volume-section {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    padding: 10px 5px 25px;
+}
+
+.volume-section input {
+    flex: 1;
+}
+
+.volume-icon {
+    font-size: 18px;
+}
+
+/* =========================================
+   Library
+   ========================================= */
+
+.library {
+    margin-top: 5px;
+}
+
+.library-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 5px 12px;
+
+    border-bottom: 1px solid #303030;
+}
+
+.library-header h2 {
+    margin: 0;
+
+    font-size: 20px;
+}
+
+#song-count {
+    color: #888888;
+    font-size: 13px;
+}
+
+/* =========================================
+   Song List
+   ========================================= */
+
+.song-list {
+    display: flex;
+    flex-direction: column;
+
+    margin-top: 8px;
+}
+
+.song-item {
+    display: flex;
+    align-items: center;
+
+    min-height: 64px;
+
+    padding: 10px 12px;
+
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    transition: background 0.15s ease;
+}
+
+.song-item:hover {
+    background: #202020;
+}
+
+.song-item:active {
+    background: #292929;
+}
+
+.song-item.active {
+    background: #292929;
+}
+
+.song-number {
+    width: 35px;
+
+    color: #777777;
+
+    text-align: center;
+
+    font-size: 14px;
+}
+
+.song-details {
+    min-width: 0;
+    flex: 1;
+
+    margin-left: 8px;
+}
+
+.song-title {
+    font-size: 16px;
+    font-weight: bold;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.song-artist {
+    margin-top: 4px;
+
+    color: #888888;
+
+    font-size: 13px;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.song-duration {
+    margin-left: 10px;
+
+    color: #777777;
+
+    font-size: 13px;
+}
+
+/* =========================================
+   Empty Library
+   ========================================= */
+
+.empty-library {
+    padding: 45px 20px;
+
+    text-align: center;
+
+    color: #777777;
+}
+
+.empty-icon {
+    margin-bottom: 10px;
+
+    font-size: 42px;
+}
+
+.empty-library h3 {
+    margin: 0 0 8px;
+
+    color: #aaaaaa;
+
+    font-size: 18px;
+}
+
+.empty-library p {
+    margin: 0;
+
+    font-size: 14px;
+}
+
+/* =========================================
+   Small Screens
+   ========================================= */
+
+@media (max-width: 600px) {
+
+    #handlebar {
+        padding: 12px;
+    }
+
+    .brand {
+        font-size: 19px;
+    }
+
+    .brand-icon {
+        font-size: 23px;
+    }
+
+    .now-playing {
+        gap: 15px;
+        padding-top: 22px;
+    }
+
+    .album-art {
+        width: 90px;
+        height: 90px;
+
+        font-size: 36px;
+    }
+
+    .track-info h1 {
+        font-size: 22px;
+    }
+
+    .track-info p {
+        font-size: 14px;
+    }
+
+    .controls {
+        gap: 10px;
+    }
+
+    .control-button {
+        width: 54px;
+        height: 54px;
+    }
+
+    .control-button.play {
+        width: 70px;
+        height: 70px;
+    }
+
+    .control-button.secondary {
+        width: 44px;
+        height: 44px;
+    }
+}
+
+/* =========================================
+   Very Small Displays
+   ========================================= */
+
+@media (max-height: 600px) {
+
+    #handlebar {
+        padding-top: 8px;
+    }
+
+    .top-bar {
+        padding-bottom: 10px;
+    }
+
+    .now-playing {
+        padding-top: 12px;
+        padding-bottom: 8px;
+    }
+
+    .album-art {
+        width: 75px;
+        height: 75px;
+    }
+
+    .controls {
+        padding: 8px 0;
+    }
+
+    .volume-section {
+        padding-bottom: 12px;
+    }
+}
