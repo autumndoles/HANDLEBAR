@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    >
+
+    <title>Handlebar</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <main id="handlebar">
+
+        <!-- Header -->
+        <header class="top-bar">
+            <div class="brand">
+                <span class="brand-icon">🛴</span>
+                <span>HANDLEBAR</span>
+            </div>
+
+            <div id="status" class="status">
+                Offline
+            </div>
+        </header>
+
+
+        <!-- Now Playing -->
+        <section class="now-playing">
+
+            <div id="album-art" class="album-art">
+                🎵
+            </div>
+
+            <div class="track-info">
+                <h1 id="song-title">No Song Playing</h1>
+                <p id="song-artist">Handlebar Music</p>
+            </div>
+
+        </section>
+
+
+        <!-- Progress -->
+        <section class="progress-section">
+
+            <div class="time-row">
+                <span id="current-time">0:00</span>
+
+                <span id="duration">0:00</span>
+            </div>
+
+            <input
+                id="progress"
+                type="range"
+                min="0"
+                max="100"
+                value="0"
+                step="0.1"
+                aria-label="Song progress"
+            >
+
+        </section>
+
+
+        <!-- Main Controls -->
+        <section class="controls">
+
+            <button
+                id="shuffle-button"
+                class="control-button secondary"
+                aria-label="Shuffle"
+            >
+                🔀
+            </button>
+
+            <button
+                id="previous-button"
+                class="control-button"
+                aria-label="Previous song"
+            >
+                ⏮
+            </button>
+
+            <button
+                id="play-button"
+                class="control-button play"
+                aria-label="Play"
+            >
+                ▶
+            </button>
+
+            <button
+                id="next-button"
+                class="control-button"
+                aria-label="Next song"
+            >
+                ⏭
+            </button>
+
+            <button
+                id="repeat-button"
+                class="control-button secondary"
+                aria-label="Repeat"
+            >
+                🔁
+            </button>
+
+        </section>
+
+
+        <!-- Volume -->
+        <section class="volume-section">
+
+            <span class="volume-icon">🔈</span>
+
+            <input
+                id="volume"
+                type="range"
+                min="0"
+                max="1"
+                value="1"
+                step="0.01"
+                aria-label="Volume"
+            >
+
+            <span class="volume-icon">🔊</span>
+
+        </section>
+
+
+        <!-- Music Library -->
+        <section class="library">
+
+            <div class="library-header">
+                <h2>Music Library</h2>
+
+                <span id="song-count">
+                    0 songs
+                </span>
+            </div>
+
+            <div
+                id="song-list"
+                class="song-list"
+                aria-label="Music library"
+            >
+
+                <div class="empty-library">
+                    <div class="empty-icon">🎵</div>
+
+                    <h3>No music yet</h3>
+
+                    <p>
+                        Add songs to the Handlebar music library.
+                    </p>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- HTML5 Audio Engine -->
+    <audio id="audio" preload="metadata"></audio>
+
+
+    <!-- Handlebar JavaScript -->
+    <script src="songs.js"></script>
+    <script src="app.js"></script>
+
+</body>
+</html>
