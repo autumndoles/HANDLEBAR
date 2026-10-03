@@ -1,6 +1,6 @@
 /* =========================================
    HANDLEBAR
-   Music Player
+   Automatic Music Player
    ========================================= */
 
 (() => {
@@ -25,15 +25,23 @@
 
     const progress = document.getElementById("progress");
 
-    const currentTimeDisplay = document.getElementById("current-time");
-    const durationDisplay = document.getElementById("duration");
+    const currentTimeDisplay =
+        document.getElementById("current-time");
 
-    const volume = document.getElementById("volume");
+    const durationDisplay =
+        document.getElementById("duration");
 
-    const songList = document.getElementById("song-list");
-    const songCount = document.getElementById("song-count");
+    const volume =
+        document.getElementById("volume");
 
-    const status = document.getElementById("status");
+    const songList =
+        document.getElementById("song-list");
+
+    const songCount =
+        document.getElementById("song-count");
+
+    const status =
+        document.getElementById("status");
 
 
     // =====================================
@@ -50,53 +58,78 @@
 
 
     // =====================================
-    // Songs.js Compatibility
-    // =====================================
-
-    /*
-        songs.js should eventually provide:
-
-        window.HANDLEBAR_SONGS = [
-            {
-                title: "Song Name",
-                artist: "Artist",
-                file: "music/song.mp3"
-            }
-        ];
-    */
-
-    if (Array.isArray(window.HANDLEBAR_SONGS)) {
-        songs = window.HANDLEBAR_SONGS;
-    }
-
-    // =====================================
     // Initialization
     // =====================================
 
-    function init() {
+    async function init() {
+
         audio.volume = Number(volume.value);
 
-        updateStatus();
+        status.textContent = "Loading...";
 
-        renderSongList();
+        await loadMusicLibrary();
 
-        if (songs.length > 0) {
-            loadSong(0, false);
-        }
     }
 
 
     // =====================================
-    // Status
+    // Load Music Library
     // =====================================
 
-    function updateStatus() {
-        if (songs.length === 0) {
-            status.textContent = "No Music";
-            return;
+    async function loadMusicLibrary() {
+
+        try {
+
+            const response =
+                await fetch("/api/music", {
+                    cache: "no-store"
+                });
+
+            if (!response.ok) {
+                throw new Error(
+                    `Server returned ${response.status}`
+                );
+            }
+
+            const data = await response.json();
+
+            if (!data.success || !Array.isArray(data.songs)) {
+                throw new Error(
+                    "Invalid music library response."
+                );
+            }
+
+            songs = data.songs;
+
+            renderSongList();
+
+            if (songs.length > 0) {
+
+                loadSong(0, false);
+
+                status.textContent = "Ready";
+
+            } else {
+
+                status.textContent = "No Music";
+
+            }
+
+        } catch (error) {
+
+            console.error(
+                "Could not load Handlebar music library:",
+                error
+            );
+
+            songs = [];
+
+            renderSongList();
+
+            status.textContent = "Server Error";
+
         }
 
-        status.textContent = "Ready";
     }
 
 
@@ -105,17 +138,24 @@
     // =====================================
 
     function formatTime(seconds) {
-        if (!Number.isFinite(seconds) || seconds < 0) {
+
+        if (
+            !Number.isFinite(seconds) ||
+            seconds < 0
+        ) {
             return "0:00";
         }
 
-        const minutes = Math.floor(seconds / 60);
+        const minutes =
+            Math.floor(seconds / 60);
 
-        const remainingSeconds = Math.floor(seconds % 60)
-            .toString()
-            .padStart(2, "0");
+        const remainingSeconds =
+            Math.floor(seconds % 60)
+                .toString()
+                .padStart(2, "0");
 
         return `${minutes}:${remainingSeconds}`;
+
     }
 
 
@@ -147,11 +187,14 @@
 
         audio.load();
 
-        songTitle.textContent = song.title || "Unknown Song";
+        songTitle.textContent =
+            song.title || "Unknown Song";
 
-        songArtist.textContent = song.artist || "Unknown Artist";
+        songArtist.textContent =
+            song.artist || "Unknown Artist";
 
-        albumArt.textContent = song.icon || "🎵";
+        albumArt.textContent =
+            song.icon || "🎵";
 
         progress.value = 0;
 
@@ -166,6 +209,7 @@
         if (autoplay) {
             playSong();
         }
+
     }
 
 
@@ -184,18 +228,29 @@
         }
 
         try {
+
             await audio.play();
 
             playButton.textContent = "⏸";
 
-            playButton.setAttribute("aria-label", "Pause");
+            playButton.setAttribute(
+                "aria-label",
+                "Pause"
+            );
 
             status.textContent = "Playing";
+
         } catch (error) {
-            console.error("Handlebar playback error:", error);
+
+            console.error(
+                "Handlebar playback error:",
+                error
+            );
 
             status.textContent = "Playback Error";
+
         }
+
     }
 
 
@@ -209,14 +264,18 @@
 
         playButton.textContent = "▶";
 
-        playButton.setAttribute("aria-label", "Play");
+        playButton.setAttribute(
+            "aria-label",
+            "Play"
+        );
 
         status.textContent = "Paused";
+
     }
 
 
     // =====================================
-    // Play / Pause Button
+    // Play / Pause
     // =====================================
 
     playButton.addEventListener("click", () => {
@@ -241,11 +300,16 @@
         }
 
         if (audio.currentTime > 3) {
+
             audio.currentTime = 0;
+
             return;
         }
 
-        loadSong(currentSongIndex - 1, true);
+        loadSong(
+            currentSongIndex - 1,
+            true
+        );
 
     });
 
@@ -272,24 +336,34 @@
         if (isShuffle && songs.length > 1) {
 
             do {
-                nextIndex = Math.floor(Math.random() * songs.length);
-            } while (nextIndex === currentSongIndex);
+
+                nextIndex =
+                    Math.floor(
+                        Math.random() * songs.length
+                    );
+
+            } while (
+                nextIndex === currentSongIndex
+            );
 
         } else {
 
-            nextIndex = currentSongIndex + 1;
+            nextIndex =
+                currentSongIndex + 1;
 
             if (nextIndex >= songs.length) {
                 nextIndex = 0;
             }
+
         }
 
         loadSong(nextIndex, true);
+
     }
 
 
     // =====================================
-    // Audio Ended
+    // Song Ended
     // =====================================
 
     audio.addEventListener("ended", () => {
@@ -309,12 +383,15 @@
 
 
     // =====================================
-    // Progress Update
+    // Progress
     // =====================================
 
     audio.addEventListener("timeupdate", () => {
 
-        if (!Number.isFinite(audio.duration) || audio.duration <= 0) {
+        if (
+            !Number.isFinite(audio.duration) ||
+            audio.duration <= 0
+        ) {
             return;
         }
 
@@ -333,16 +410,20 @@
 
 
     // =====================================
-    // Progress Seeking
+    // Seek
     // =====================================
 
     progress.addEventListener("input", () => {
 
-        if (!Number.isFinite(audio.duration) || audio.duration <= 0) {
+        if (
+            !Number.isFinite(audio.duration) ||
+            audio.duration <= 0
+        ) {
             return;
         }
 
-        const percentage = Number(progress.value) / 100;
+        const percentage =
+            Number(progress.value) / 100;
 
         audio.currentTime =
             audio.duration * percentage;
@@ -356,7 +437,8 @@
 
     volume.addEventListener("input", () => {
 
-        audio.volume = Number(volume.value);
+        audio.volume =
+            Number(volume.value);
 
     });
 
@@ -416,19 +498,28 @@
         songList.innerHTML = "";
 
         songCount.textContent =
-            `${songs.length} ${songs.length === 1 ? "song" : "songs"}`;
+            `${songs.length} ${
+                songs.length === 1
+                    ? "song"
+                    : "songs"
+            }`;
 
         if (songs.length === 0) {
 
             songList.innerHTML = `
                 <div class="empty-library">
-                    <div class="empty-icon">🎵</div>
+
+                    <div class="empty-icon">
+                        🎵
+                    </div>
 
                     <h3>No music yet</h3>
 
                     <p>
-                        Add songs to the Handlebar music library.
+                        Add songs to the Handlebar
+                        music folder.
                     </p>
+
                 </div>
             `;
 
@@ -437,54 +528,69 @@
 
         songs.forEach((song, index) => {
 
-            const item = document.createElement("div");
+            const item =
+                document.createElement("div");
 
             item.className = "song-item";
 
             item.dataset.index = index;
 
             item.innerHTML = `
+
                 <div class="song-number">
                     ${index + 1}
                 </div>
 
                 <div class="song-details">
+
                     <div class="song-title">
-                        ${escapeHTML(song.title || "Unknown Song")}
+                        ${escapeHTML(
+                            song.title ||
+                            "Unknown Song"
+                        )}
                     </div>
 
                     <div class="song-artist">
-                        ${escapeHTML(song.artist || "Unknown Artist")}
+                        ${escapeHTML(
+                            song.artist ||
+                            "Unknown Artist"
+                        )}
                     </div>
+
                 </div>
 
                 <div class="song-duration">
                     —
                 </div>
+
             `;
 
-            item.addEventListener("click", () => {
-
-                loadSong(index, true);
-
-            });
+            item.addEventListener(
+                "click",
+                () => {
+                    loadSong(index, true);
+                }
+            );
 
             songList.appendChild(item);
 
         });
 
         updateSongList();
+
     }
 
 
     // =====================================
-    // Update Active Song
+    // Active Song
     // =====================================
 
     function updateSongList() {
 
         const items =
-            songList.querySelectorAll(".song-item");
+            songList.querySelectorAll(
+                ".song-item"
+            );
 
         items.forEach((item, index) => {
 
@@ -499,7 +605,7 @@
 
 
     // =====================================
-    // HTML Escaping
+    // Escape HTML
     // =====================================
 
     function escapeHTML(value) {
@@ -515,15 +621,18 @@
 
 
     // =====================================
-    // Metadata Loaded
+    // Metadata
     // =====================================
 
-    audio.addEventListener("loadedmetadata", () => {
+    audio.addEventListener(
+        "loadedmetadata",
+        () => {
 
-        durationDisplay.textContent =
-            formatTime(audio.duration);
+            durationDisplay.textContent =
+                formatTime(audio.duration);
 
-    });
+        }
+    );
 
 
     // =====================================
@@ -560,6 +669,10 @@
     });
 
 
+    // =====================================
+    // Audio Error
+    // =====================================
+
     audio.addEventListener("error", () => {
 
         status.textContent = "Song Error";
@@ -574,71 +687,80 @@
 
     // =====================================
     // Keyboard Controls
-    // Useful while testing on Chromebook
+    // Useful when testing on a computer
     // =====================================
 
-    document.addEventListener("keydown", (event) => {
+    document.addEventListener(
+        "keydown",
+        (event) => {
 
-        // Space = Play / Pause
-        if (event.code === "Space") {
+            // Space = Play/Pause
+            if (event.code === "Space") {
 
-            event.preventDefault();
+                event.preventDefault();
 
-            if (audio.paused) {
-                playSong();
-            } else {
-                pauseSong();
+                if (audio.paused) {
+                    playSong();
+                } else {
+                    pauseSong();
+                }
+
+            }
+
+            // Left = Previous
+            if (event.code === "ArrowLeft") {
+
+                previousButton.click();
+
+            }
+
+            // Right = Next
+            if (event.code === "ArrowRight") {
+
+                nextButton.click();
+
+            }
+
+            // Up = Volume Up
+            if (event.code === "ArrowUp") {
+
+                event.preventDefault();
+
+                const newVolume =
+                    Math.min(
+                        1,
+                        audio.volume + 0.05
+                    );
+
+                audio.volume = newVolume;
+
+                volume.value = newVolume;
+
+            }
+
+            // Down = Volume Down
+            if (event.code === "ArrowDown") {
+
+                event.preventDefault();
+
+                const newVolume =
+                    Math.max(
+                        0,
+                        audio.volume - 0.05
+                    );
+
+                audio.volume = newVolume;
+
+                volume.value = newVolume;
+
             }
 
         }
-
-        // Arrow Left = Previous
-        if (event.code === "ArrowLeft") {
-
-            previousButton.click();
-
-        }
-
-        // Arrow Right = Next
-        if (event.code === "ArrowRight") {
-
-            nextButton.click();
-
-        }
-
-        // Arrow Up = Volume Up
-        if (event.code === "ArrowUp") {
-
-            event.preventDefault();
-
-            const newVolume =
-                Math.min(1, audio.volume + 0.05);
-
-            audio.volume = newVolume;
-
-            volume.value = newVolume;
-
-        }
-
-        // Arrow Down = Volume Down
-        if (event.code === "ArrowDown") {
-
-            event.preventDefault();
-
-            const newVolume =
-                Math.max(0, audio.volume - 0.05);
-
-            audio.volume = newVolume;
-
-            volume.value = newVolume;
-
-        }
-
-    });
+    );
 
 
     // =====================================
-    // Start Handlebar
+    // Start
     // =====================================
 
     init();
